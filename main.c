@@ -52,9 +52,9 @@ void getString(){
         char str[100] ;
         static char str1[10][20];
 
-       fgets(str,100,stdin);
+       fgets(str,100,stdin); //input from user
 
-        for (i = 0; str[i]!= '\n'; i++)
+        for (i = 0; str[i]!= '\n'; i++) //loopin througt the input string, splits the inputstring into arguments.
         {
 
             if (str[i]==' ')
@@ -137,6 +137,36 @@ void getDir(){
         else
             perror ("Couldn't open the directory");
 }
+
+
+
+void changeDirectory(){
+
+
+}
+
+
+void controller(){
+    int num;
+
+ switch(num){
+        case 0:execute(ptr1);
+        break;
+
+         case 1:getDir();
+         break;
+
+     case 2: changeDirectory()
+
+
+
+ }
+
+
+
+}
+
+
 
 
 /*Checks if the command is dir'*/

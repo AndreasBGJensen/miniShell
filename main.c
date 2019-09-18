@@ -26,7 +26,7 @@ int main() {
     welcome();
     while(1) {
 
-        printf("What do you command\n");
+        printf("\nWhat do you command\n");
         getString();
         fflush(stdin);
         crossRoad();
@@ -103,14 +103,13 @@ void execute(char **arr) {
 
     int pid = fork();
 
-    printf("PID %d", pid);
     if (pid == 0) {   //The child process is running
 
         execvp(arr[1], arr);
         //execvp(argv[1], argv);
 
     } else if (pid < 0) { //If child process could not be created
-        perror("Der er sket en fejl ");
+        perror("Der er sket en fejl\n ");
     } else {
         waitpid(-1, &status, 0); //0 menas that it will wait for any child process to terminale}
     }
@@ -187,24 +186,6 @@ int controller(){
     return -1;
 }
 
-
-/*Checks if the command is dir'*/
-/*
-int chectInput(){
-
-        char input[] = {"dir"};
-        //printf("%s first argument\n",ptr1[0]);
-
-        fflush(stdout); //So it will print to console further on
-
-        int res = strcmp(ptr1[0],input);
-
-        if(res == 0) {
-                return 1;
-        }
-    return 0;
-}
-*/
 
 void printArguments(char ** arr){
     int y = 0;

@@ -9,8 +9,11 @@ void printArguments(char ** arr);
 void execute(char **arr);
 void getDir();
 int chectInput();
+int controller();
+void crossRoad();
+void changeDirectory();
 
-#define MAXARGUMENTS 3
+#define MAXARGUMENTS 10
 
 
 char *(ptr1)[MAXARGUMENTS]; //This pointer array is used for holding the reference to the arguments.
@@ -25,7 +28,9 @@ int main() {
 
         printf("What do you command\n");
         getString();
-        execute(ptr1);
+        fflush(stdin);
+        crossRoad();
+        //execute(ptr1);
 
     }
     return 0;
@@ -48,6 +53,8 @@ void welcome()
  */
 
 void getString(){
+
+        char ** abc = ptr1;
         int i, j = 0, k = 0;
         char str[100] ;
         static char str1[10][20];
@@ -69,22 +76,18 @@ void getString(){
         }
         str1[k][j] = '\0';
 
-        char * nuller = {"NULL"};
 
-        int d = 0;
-        for(d; d<5;d++){
-
-            str1[k+1][d]=nuller[d];
-        }
 
         //Der lægges een til for at få alle argumenter med.
         numberOfArguments = k+1;
 
-        int y = 0;
-        for(y; y<numberOfArguments+1;y++) {
+    int y = 0;
+    for(y; y<numberOfArguments;y++) {
 
-            ptr1[y]=str1[y];
-        }
+        ptr1[y]=str1[y];
+    }
+    ptr1[numberOfArguments]=NULL;
+
 
         printf("Number of arguments %d", numberOfArguments);
 }
@@ -98,22 +101,19 @@ void getString(){
 
 void execute(char **arr) {
 
-   if (chectInput()) {//
-        getDir();
-    }else
-        {
+    int pid = fork();
 
-        pid_t pid = fork();
-        waitpid(getpid(), &status, 0); //0 menas that it will wait for any child process to terminale
+    printf("PID %d", pid);
+    if (pid == 0) {   //The child process is running
 
-        if (pid == 0) {   //The child process is running
-           execvp(arr[0], arr);
+        execvp(arr[1], arr);
+        //execvp(argv[1], argv);
 
-        }else if (pid<0)
-                { //If child process could not be created
-                perror("Der er sket en fejl ");
-                }
-   }
+    } else if (pid < 0) { //If child process could not be created
+        perror("Der er sket en fejl ");
+    } else {
+        waitpid(-1, &status, 0); //0 menas that it will wait for any child process to terminale}
+    }
 }
 
 
@@ -141,25 +141,24 @@ void getDir(){
 
 
 void changeDirectory(){
-
+printf("Change directory\n");
 
 }
 
 
-void controller(){
-    int num;
+void crossRoad(){
+printf("CrossRoad is running\n");
 
- switch(num){
+
+ switch(controller()){
         case 0:execute(ptr1);
         break;
 
-         case 1:getDir();
+     case 1: changeDirectory();
          break;
 
-     case 2: changeDirectory()
-
-
-
+         case 2:getDir();
+         break;
  }
 
 
@@ -167,10 +166,30 @@ void controller(){
 }
 
 
+int controller(){
+
+
+    char *indput[] = {"exe", "cd","dir"};
+
+    for(int i = 0; i<4;i++){
+
+        printf("ptr1 %s/ indput: %s\n",ptr1[0],indput[i] );
+        int res = strcmp(ptr1[0],indput[i]);
+
+        if(res==0){
+
+            printf("I is: %d\n",i);
+            return i;
+
+        }
+    }
+
+    return -1;
+}
 
 
 /*Checks if the command is dir'*/
-
+/*
 int chectInput(){
 
         char input[] = {"dir"};
@@ -185,7 +204,7 @@ int chectInput(){
         }
     return 0;
 }
-
+*/
 
 void printArguments(char ** arr){
     int y = 0;

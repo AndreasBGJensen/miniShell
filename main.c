@@ -50,7 +50,6 @@ void welcome()
 /*
  * Recives the inputstring and processes it so it can be used for arguments later on.
  */
-
 void getString(){
 
     char ** abc = ptr1;
@@ -95,7 +94,6 @@ void getString(){
  * If the request is to open af file a childprocess have to be made.
  * The execute method checks the command that have been typed, and disides if it will create a child process.
  */
-
 void execute(char **arr) {
 
     arr = removeFirstElement(arr);
@@ -119,7 +117,6 @@ void execute(char **arr) {
  * Opens the current directory and prints all the files.
  * The code is originally from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
  */
-
 void getDir(){
 
     printf("The current directory is:"); getDirectory();
@@ -149,12 +146,14 @@ void changeDirectory(){
     getDirectory();
 }
 
+
 /*
  * crossRoad function executes the desided action.
  * It gets the input from the controller method.
  */
 
 void crossRoad(){
+
      switch(controller()){
             case 0:execute(ptr1);
             break;
@@ -174,9 +173,7 @@ void crossRoad(){
  * a predefined array: exe for executing the programme, cd for change derictory.
  * The controller coorporates with the function crossRoad().
  */
-
 int controller(){
-
 
     char *indput[] = {"exe", "cd","dir"};
 
@@ -190,7 +187,6 @@ int controller(){
 
         }
     }
-
     return -1;
 }
 
@@ -208,20 +204,15 @@ void getDirectory(){
         perror("getcwd() error");
 
     }
-
 }
 
 /*
  * Removes the first element of an array.
  */
-
-
 char ** removeFirstElement(char **arr){
 
-
-    for(int i=1;i<4;i++)
-        arr[i-1]=arr[i];
-
+    for(int i=1;i<4;i++) {
+        arr[i - 1] = arr[i];
+    }
     return arr;
-
 }

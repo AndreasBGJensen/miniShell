@@ -1,0 +1,5 @@
+Some of the function code are heavely inspired by other sources. These will be listed here:
+
+void getDir(): https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
+void getDirectory(): https://stackoverflow.com/questions/298510/how-to-get-the-current-directory-in-a-c-program
+void getStringe(): DTU Course "C programming for Java Programmers" 

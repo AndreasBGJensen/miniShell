@@ -12,6 +12,7 @@ void crossRoad();
 void changeDirectory();
 void getDirectory();
 char ** removeFirstElement(char **arr);
+void makeDirectory(char **arr);
 
 #define MAXARGUMENTS 10
 
@@ -91,6 +92,54 @@ void getString(){
 
 
 /*
+ * The controller method desides what action that will be made. It compares the first input argument with
+ * a predefined array: exe for executing the programme, cd for change derictory.
+ * The controller coorporates with the function crossRoad().
+ */
+int controller(){
+
+    char *indput[] = {"exe", "cd","dir", "mkdir"};
+
+    for(int i = 0; i<4;i++){
+
+        int res = strcmp(ptr1[0],indput[i]);
+
+        if(res==0){
+
+            return i;
+
+        }
+    }
+    return -1;
+}
+
+
+/*
+ * crossRoad function executes the desided action.
+ * It gets the input from the controller method.
+ */
+
+void crossRoad(){
+
+    switch(controller()){
+        case 0:execute(ptr1);
+            break;
+
+        case 1: changeDirectory();
+            break;
+
+        case 2:getDir();
+            break;
+
+        case 3: makeDirectory(ptr1);
+            break;
+
+        default: printf("Unknown command\n");
+    }
+}
+
+
+/*
  * If the request is to open af file a childprocess have to be made.
  * The execute method checks the command that have been typed, and disides if it will create a child process.
  */
@@ -148,50 +197,6 @@ void changeDirectory(){
 
 
 /*
- * crossRoad function executes the desided action.
- * It gets the input from the controller method.
- */
-
-void crossRoad(){
-
-     switch(controller()){
-            case 0:execute(ptr1);
-            break;
-
-         case 1: changeDirectory();
-             break;
-
-             case 2:getDir();
-             break;
-
-         default: printf("Unknown command\n");
- }
-}
-
-/*
- * The controller method desides what action that will be made. It compares the first input argument with
- * a predefined array: exe for executing the programme, cd for change derictory.
- * The controller coorporates with the function crossRoad().
- */
-int controller(){
-
-    char *indput[] = {"exe", "cd","dir"};
-
-    for(int i = 0; i<3;i++){
-
-        int res = strcmp(ptr1[0],indput[i]);
-
-        if(res==0){
-
-            return i;
-
-        }
-    }
-    return -1;
-}
-
-
-/*
  * Prints the durrent directory out to the terminal
  *The method is inspired from: https://stackoverflow.com/questions/298510/how-to-get-the-current-directory-in-a-c-program
  */
@@ -215,4 +220,17 @@ char ** removeFirstElement(char **arr){
         arr[i - 1] = arr[i];
     }
     return arr;
+}
+
+void makeDirectory(char **arr){
+    arr = removeFirstElement(arr);
+
+    if(mkdir(arr[0])==0){
+
+        printf("The directory named: %s, has been created", arr[0]);
+    }else{
+        printf("Something went wrong");
+    }
+
+
 }

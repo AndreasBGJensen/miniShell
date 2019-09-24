@@ -5,10 +5,8 @@
 
 void welcome();
 void getString();
-void printArguments(char ** arr);
 void execute(char **arr);
 void getDir();
-int chectInput();
 int controller();
 void crossRoad();
 void changeDirectory();
@@ -32,16 +30,15 @@ int main() {
         getString();
         fflush(stdin);
         crossRoad();
-        //execute(ptr1);
 
     }
     return 0;
 }
 
 
-
-
-
+/*
+ * Prints instructione and an welcome message.
+ */
 void welcome()
     {
         printf("Wlcome to this miniShell\n");
@@ -51,44 +48,44 @@ void welcome()
     }
 
 /*
- * Getting the inputstring and processes it so it can be used for arguments later on.
+ * Recives the inputstring and processes it so it can be used for arguments later on.
  */
 
 void getString(){
 
-        char ** abc = ptr1;
-        int i, j = 0, k = 0;
-        char str[100] ;
-        static char str1[10][20];
+    char ** abc = ptr1;
+    int i, j = 0, k = 0;
+    char str[100] ;
+    static char str1[10][20];
 
-       fgets(str,100,stdin); //input from user
+    fgets(str,100,stdin); //input from user
 
-        for (i = 0; str[i]!= '\n'; i++) //loopin througt the input string, splits the inputstring into arguments.
+    for (i = 0; str[i]!= '\n'; i++) //loopin througt the input string, splits the inputstring into arguments.
+    {
+
+        if (str[i]==' ')
         {
-
-            if (str[i]==' ')
-            {
-                str1[k][j] = '\0';
-                k++;
-                j = 0;
-            }else
-                {
-                str1[k][j] = str[i];j++;
-                }
+            str1[k][j] = '\0';// adds \0 at the end of the argument
+            k++;
+            j = 0;
+        }else
+        {
+            str1[k][j] = str[i];j++;
         }
-        str1[k][j] = '\0';
+    }
+    str1[k][j] = '\0';
 
 
 
-        //Der lægges een til for at få alle argumenter med.
-        numberOfArguments = k+1;
+    //Der lægges een til for at få alle argumenter med.
+    numberOfArguments = k+1;
 
     int y = 0;
     for(y; y<numberOfArguments;y++) {
 
         ptr1[y]=str1[y];
     }
-    ptr1[numberOfArguments]=NULL;
+    ptr1[numberOfArguments]=NULL; //For at argumenterne kan anvendes for funktionen execvp()
 
 }
 
@@ -120,6 +117,7 @@ void execute(char **arr) {
 
 /*
  * Opens the current directory and prints all the files.
+ * The code is originally from: https://www.gnu.org/software/libc/manual/html_node/Simple-Directory-Lister.html
  */
 
 void getDir(){
@@ -142,42 +140,47 @@ void getDir(){
 }
 
 
-
+/*
+ * Changes the directory and prints the directory
+ */
 void changeDirectory(){
-
 
     chdir(ptr1[1]);
     getDirectory();
-
-
 }
 
+/*
+ * crossRoad function executes the desided action.
+ * It gets the input from the controller method.
+ */
 
 void crossRoad(){
+     switch(controller()){
+            case 0:execute(ptr1);
+            break;
 
+         case 1: changeDirectory();
+             break;
 
- switch(controller()){
-        case 0:execute(ptr1);
-        break;
+             case 2:getDir();
+             break;
 
-     case 1: changeDirectory();
-         break;
-
-         case 2:getDir();
-         break;
+         default: printf("Unknown command\n");
  }
-
-
-
 }
 
+/*
+ * The controller method desides what action that will be made. It compares the first input argument with
+ * a predefined array: exe for executing the programme, cd for change derictory.
+ * The controller coorporates with the function crossRoad().
+ */
 
 int controller(){
 
 
     char *indput[] = {"exe", "cd","dir"};
 
-    for(int i = 0; i<4;i++){
+    for(int i = 0; i<3;i++){
 
         int res = strcmp(ptr1[0],indput[i]);
 
@@ -192,20 +195,10 @@ int controller(){
 }
 
 
-void printArguments(char ** arr){
-    int y = 0;
-    for(y; y<=numberOfArguments;y++){
-
-
-
-        printf("Ppinter;%s\n", arr[y]);
-
-    }
-
-
-}
-
-
+/*
+ * Prints the durrent directory out to the terminal
+ *The method is inspired from: https://stackoverflow.com/questions/298510/how-to-get-the-current-directory-in-a-c-program
+ */
 void getDirectory(){
 
     char cwd[200];
@@ -217,6 +210,10 @@ void getDirectory(){
     }
 
 }
+
+/*
+ * Removes the first element of an array.
+ */
 
 
 char ** removeFirstElement(char **arr){

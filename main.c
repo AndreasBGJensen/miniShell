@@ -12,6 +12,8 @@ int chectInput();
 int controller();
 void crossRoad();
 void changeDirectory();
+void getDirectory();
+char ** removeFirstElement(char **arr);
 
 #define MAXARGUMENTS 10
 
@@ -88,8 +90,6 @@ void getString(){
     }
     ptr1[numberOfArguments]=NULL;
 
-
-        printf("Number of arguments %d", numberOfArguments);
 }
 
 
@@ -101,11 +101,13 @@ void getString(){
 
 void execute(char **arr) {
 
+    arr = removeFirstElement(arr);
+
     int pid = fork();
 
     if (pid == 0) {   //The child process is running
 
-        execvp(arr[1], arr);
+        execvp(arr[0], arr);
         //execvp(argv[1], argv);
 
     } else if (pid < 0) { //If child process could not be created
@@ -121,6 +123,8 @@ void execute(char **arr) {
  */
 
 void getDir(){
+
+    printf("The current directory is:"); getDirectory();
 
         DIR *dp;
         struct dirent *ep;
@@ -140,13 +144,16 @@ void getDir(){
 
 
 void changeDirectory(){
-printf("Change directory\n");
+
+
+    chdir(ptr1[1]);
+    getDirectory();
+
 
 }
 
 
 void crossRoad(){
-printf("CrossRoad is running\n");
 
 
  switch(controller()){
@@ -172,12 +179,10 @@ int controller(){
 
     for(int i = 0; i<4;i++){
 
-        printf("ptr1 %s/ indput: %s\n",ptr1[0],indput[i] );
         int res = strcmp(ptr1[0],indput[i]);
 
         if(res==0){
 
-            printf("I is: %d\n",i);
             return i;
 
         }
@@ -197,5 +202,29 @@ void printArguments(char ** arr){
 
     }
 
+
+}
+
+
+void getDirectory(){
+
+    char cwd[200];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Current working dir: %s\n", cwd);
+    } else {
+        perror("getcwd() error");
+
+    }
+
+}
+
+
+char ** removeFirstElement(char **arr){
+
+
+    for(int i=1;i<4;i++)
+        arr[i-1]=arr[i];
+
+    return arr;
 
 }
